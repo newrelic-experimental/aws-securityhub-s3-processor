@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  newrelic-securitylake-s3-processor
+  This function gets triggerred by the SQS Queue which is created by the Security Lake.
+  This function also assumes a role, which is created by Security Lake to read the files stored in S3 Bucket.
+
+Parameters:
+  SecurityLakeSubscriberRoleArn:
+    Type: String
+    Description: > 
+      IAM Role ARN created by Security Lake Subscriber. 
+      The function will assume this role.
+  SecurityLakeSQSArn:
+    Type: String
+    Description: > 
+      ARN of the SQS created by Security Lake subscriber
+  ExternalID:
+    Type: String
+    Description: > 
+      External ID created for the Security Lake subscriber.
+  NRLicenseKey:
+    Type: String
+    Description: > 
+      License Key for New Relic Account.
+      Go to https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/ for further details.
+Globals:
+  Function:
+    Timeout: 60
+    MemorySize: 128
+
+Resources:
+  LogForwarder:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3_log_forwarder_parquet/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:336392948345:layer:AWSSDKPandas-Python39:4
+      Environment:
+        Variables: 
+          ROLE_ARN : !Ref SecurityLakeSubscriberRoleArn
+          EXTERNAL_ID: !Ref ExternalID
+          LICENSE_KEY: !Ref NRLicenseKey
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !Ref SecurityLakeSQSArn
+            BatchSize: 10
+      Policies:
+        # - SQSPollerPolicy:
+        #     QueueName: !Ref SecurityLakeSubscriberQueueName
+        - Version: '2012-10-17' 
+          Statement:
+            - Effect: Allow
+              Action:
+                - "sqs:ChangeMessageVisibility"
+                - "sqs:ChangeMessageVisibilityBatch"
+                - "sqs:DeleteMessage"
+                - "sqs:DeleteMessageBatch"
+                - "sqs:GetQueueAttributes"
+                - "sqs:ReceiveMessage"
+              Resource: !Ref SecurityLakeSQSArn
+        - Version: '2012-10-17' 
+          Statement:
+            - Effect: Allow
+              Action:
+                - sts:AssumeRole
+              Resource: !Ref SecurityLakeSubscriberRoleArn

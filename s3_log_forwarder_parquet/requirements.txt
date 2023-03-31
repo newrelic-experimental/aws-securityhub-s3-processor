@@ -1,0 +1,11 @@
+aiohttp==3.7.4
+async-timeout==3.0.1
+requests==2.28.1
+six==1.15.0
+urllib3==1.26.5
+# yarl==1.5.1
+# fsspec
+# # pandas
+# # fastparquet
+# # pyarrow
+# s3fs
