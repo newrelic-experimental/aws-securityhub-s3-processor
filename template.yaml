@@ -8,10 +8,12 @@ Metadata:
     SpdxLicenseId: Apache-2.0
     LicenseUrl: LICENSE.txt
     ReadmeUrl: README.md
-    Labels: ['Security Lake','New Relic']
-    HomePageUrl: https://github.com/4demos/newrelic-securitylake-s3-processor-LogForwarder
-    SemanticVersion: 1.0.1
-    SourceCodeUrl: https://github.com/4demos/newrelic-securitylake-s3-processor-LogForwarder
+    Labels:
+      - Security_Lake
+      - New_Relic
+    HomePageUrl: https://github.com/newrelic-experimental/aws-securityhub-s3-processor
+    SemanticVersion: 1.0.2
+    SourceCodeUrl: https://github.com/newrelic-experimental/aws-securityhub-s3-processor
 
 Description: >
   newrelic-securitylake-s3-processor-LogForwarder
