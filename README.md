@@ -1,40 +1,30 @@
-# newrelic-securitylake-s3-processor
+[![Community Plus header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Community_Plus.png)](https://opensource.newrelic.com/oss-category/#community-plus)
 
-### Subscriber Application
+# AWS Lambda for sending logs from AWS Security Lake to New Relic
 
-Subscriber application uses [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide) to create a Lambda function (including Lambda execution IAM Roles and related configurations), which gets triggered on SQS Queue. SQS Queue has the metadata of the S3 objects to read. Security lake inserts the records into this SQS Queue, when there is a new object put on the S3 bucket. The lambda function logic, when trigerred, reads the S3 objects (which are in Parquet format) and sends to New Relic over the defined endpoints. The lambda function does not filters out any data. Data is GZipped before its sent.
+`newrelic-securitylake-s3-processor-LogForwarder` is an AWS Serverless application that sends log data from AWS Security Lake to New Relic.
 
-This subscriber application needs to be deployed only in one region. Use the region consolidation feature in AWS Security lake to consolidate all the data in one region's S3 bucket. 
+## Requirements
 
-Without the use of region consolidation, the direction to customers should be to deploy this subcriber application in every AWS region where they have security lake enabled.
+To forward data to New Relic you need access to a [New Relic License Key](https://docs.newrelic.com/docs/accounts/install-new-relic/account-setup/license-key).
 
-This subscriber application needs to be deployed in customer's AWS account (not necessarily in the delegated security administrator, where the Security Lake is hosting the SQS), but at the time of subscriber creation, ensure to use the AWS account, where you wish to deploy the subcriber application (this Lambda function) as Security Lake will create necessary permissions on the SQS , S3 buckets and Cross account Roles.
+## Install
 
-![](./images/New%20Relic%20-%20Security%20Lake%20Subscriber.jpeg)
+To install and configure this New Relic log shipper Lambda, [see our documentation](https://docs.newrelic.com/docs/logs/forward-logs/aws-lambda-sending-security-logs-s3/).
 
-## SAM CLI installation
+## Support
 
-Refer [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started.html)
+New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. Like all official New Relic open source projects. Please ask related questions there [Community topics in the New Relic Explorers Hub](https://discuss.newrelic.com).
 
-## Build of the SAM application
+## Contributing
 
-```
-sam build
-```
+Contributions to improve newrelic-securitylake-s3-processor-LogForwarder are encouraged! Keep in mind when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. You only have to sign the CLA one time per project.
 
-## Deploying the SAM application
+To execute our corporate CLA, which is required if your contribution is on behalf of a company, or if you have any questions, please drop us an email at opensource@newrelic.com.
 
-Follow the prompts to enter the values
+## Developers
 
-```
-sam deploy --guided
-```
+For more information about how to contribute from the developer point of view, we recommend you to take a look to the [DEVELOPER.md](./DEVELOPER.md) that contains most of the info you'll need.
 
-* SecurityLakeSubscriberRoleArn : Go to the security lake > Subscriber > New Relic to see this
-* SecurityLakeSQSArn : Go to the security lake > Subscriber > New Relic to see this. 
-* ExternalID : Go to the security lake > Subscriber > New Relic to see this
-* NRLicenseKey : New Relic license key
-
-## NOTE
-
-* Have only one Lambda function at a given point in the region, which is enabled to get trigerred for the SQS, for a given subscriber. You can ensure this by going to the Queue > Lambda Triggers
+## License
+`newrelic-securitylake-s3-processor-LogForwarder` is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License. The newrelic-securitylake-s3-processor-LogForwarder also uses source code from third party libraries. Full details on which libraries are used and the terms under which they are licensed can be found in the third party notices document

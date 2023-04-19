@@ -1,7 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: newrelic-securitylake-s3-processor-LogForwarder
+    Description: Application to deliver Security Lake data to New Relic
+    Author: New Relic
+    SpdxLicenseId: Apache-2.0
+    LicenseUrl: LICENSE.txt
+    ReadmeUrl: README.md
+    Labels: ['Security Lake','New Relic']
+    HomePageUrl: https://github.com/4demos/newrelic-securitylake-s3-processor-LogForwarder
+    SemanticVersion: 1.0.1
+    SourceCodeUrl: https://github.com/4demos/newrelic-securitylake-s3-processor-LogForwarder
+
 Description: >
-  newrelic-securitylake-s3-processor
+  newrelic-securitylake-s3-processor-LogForwarder
   This function gets triggerred by the SQS Queue which is created by the Security Lake.
   This function also assumes a role, which is created by Security Lake to read the files stored in S3 Bucket.
 
