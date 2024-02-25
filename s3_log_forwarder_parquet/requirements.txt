@@ -1,4 +1,4 @@
-aiohttp==3.7.4
+aiohttp==3.9.2
 async-timeout==3.0.1
 requests==2.31.0
 six==1.15.0
